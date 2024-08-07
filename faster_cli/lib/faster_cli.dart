@@ -33,8 +33,9 @@ void createModule(String moduleName) {
   final currentScriptPath = Platform.script.toFilePath();
   final currentDirectory =
       path.dirname(path.fromUri(Uri.file(currentScriptPath)));
-  final templatesDirectory =
-      path.normalize(path.join(currentDirectory, '..', 'lib', 'templates'));
+
+  final templatesDirectory = path.normalize(
+      path.join(currentDirectory, '..', '..', '..', '..', 'lib', 'templates'));
 
   print('Current directory: $currentDirectory');
   print('Templates directory: $templatesDirectory');
@@ -76,6 +77,7 @@ void _createModuleStructure(
     Directory(path.join(domainDirectory.path, 'entities')),
     Directory(path.join(domainDirectory.path, 'repositories')),
     Directory(path.join(domainDirectory.path, 'usecases')),
+    Directory(path.join(domainDirectory.path, 'providers')),
   ];
 
   _createDirectories(dataSubdirectories);
@@ -115,6 +117,11 @@ void _copyTemplateFiles(
       'source': 'usecase.dart',
       'destination':
           path.join('domain', 'usecases', '${fileModuleName}_usecase.dart')
+    },
+    {
+      'source': 'providers.dart',
+      'destination':
+          path.join('domain', 'providers', '${fileModuleName}_providers.dart')
     },
     {
       'source': 'bloc.dart',
