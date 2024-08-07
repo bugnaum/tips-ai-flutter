@@ -1,7 +1,5 @@
 library navigation_router;
 
-/// A Calculator.
-class Calculator {
-  /// Returns [value] plus 1.
-  int addOne(int value) => value + 1;
-}
+export 'app_router.dart';
+export 'navigation_extensions.dart';
+export 'transition_info.dart';

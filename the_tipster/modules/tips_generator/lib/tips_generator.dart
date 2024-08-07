@@ -1,7 +1,27 @@
 library tips_generator;
 
-/// A Calculator.
-class Calculator {
-  /// Returns [value] plus 1.
-  int addOne(int value) => value + 1;
+import 'package:navigation_router/navigation_router.dart';
+import 'package:provider/provider.dart';
+import 'package:tips_generator/modules/leaguetips/presentation/pages/leaguetips_page.dart';
+
+import 'modules/leaguetips/domain/providers/leaguetips_providers.dart';
+
+class TipsGeneratorRouter {
+  static List<AppRoute> routes() {
+    return [
+      AppRoute(
+        name: 'LeagueTips',
+        path: '/leagueTips',
+        builder: (context, _) => const LeagueTipsPage(),
+      ),
+    ];
+  }
+}
+
+class TipsGeneratorProviders {
+  static List<Provider> providers() {
+    return [
+      ...LeaguetipsProviders.providers(),
+    ];
+  }
 }

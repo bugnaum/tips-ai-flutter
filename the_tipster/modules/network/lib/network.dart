@@ -6,15 +6,13 @@ import 'package:flutter/foundation.dart';
 
 export 'api_manager/api_manager.dart';
 export 'common/api_call_response.dart';
-export 'common/loader_state.dart';
-export 'common/requestable.dart';
 export 'network.dart';
 
 class Environment {
   static String get baseUrl {
     return kDebugMode
-        ? 'https://beta-golador-news.azurewebsites.net'
-        : 'https://beta-golador-news.azurewebsites.net';
+        ? 'https://tips-ai-api-8a0a7f7f5f07.herokuapp.com'
+        : 'https://tips-ai-api-8a0a7f7f5f07.herokuapp.com';
   }
 
   static String get apiKey {
@@ -40,7 +38,7 @@ class Network {
     'Content-Type': 'application/json',
     'Accept': '*/*',
     'locale': 'PT',
-    'Authorization': 'Bearer ${NetworkParams().bearerToken}' ?? ''
+    'Hard-Authentication': "0b3f0c56-27b2-4a56-8f8e-23152e240da8",
   };
 
   static Map<String, String> noAuthHeaders = {

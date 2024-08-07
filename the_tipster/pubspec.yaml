@@ -30,6 +30,12 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  design_system:
+    path: modules/design_system
+  tips_generator:
+    path: modules/tips_generator
+  navigation_router:
+    path: modules/navigation_router
 
 
   # The following adds the Cupertino Icons font to your application.
