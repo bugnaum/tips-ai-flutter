@@ -1,0 +1,30 @@
+name: the_tipster
+
+packages:
+  - .
+  - modules/**
+
+command:
+  bootstrap:
+    runPubGetInParallel: true
+
+scripts:
+  fast:
+    run: |
+      melos clean:all
+      melos bootstrap
+    description: "Run `flutter pub get` in all packages."
+
+  clean:all:
+    run: |
+      flutter clean
+      rm -rf .dart_tool
+      rm -rf .packages
+      rm -rf build
+      rm -rf ios/.symlinks
+      rm -rf ios/Flutter/Flutter.framework
+      rm -rf ios/Flutter/Flutter.podspec
+      rm -rf ios/ServiceDefinitions.json
+      rm -rf android/.gradle
+      rm -rf android/app/build
+    description: "Clean the build artifacts and caches in all packages."
