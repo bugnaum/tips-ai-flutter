@@ -12,11 +12,18 @@ void main(List<String> args) {
   final moduleName = args.length > 1 ? args[1] : null;
 
   switch (command) {
-    case 'create':
+    case 'module':
       if (moduleName == null) {
         print('Usage: dart main.dart create <module_name>');
       } else {
         createModule(moduleName);
+      }
+      break;
+    case 'component':
+      if (moduleName == null) {
+        print('Usage: dart main.dart create <module_name>');
+      } else {
+        createComponent(moduleName);
       }
       break;
     case 'help':
@@ -29,20 +36,42 @@ void main(List<String> args) {
   }
 }
 
-void createModule(String moduleName) {
-  final currentScriptPath = Platform.script.toFilePath();
-  final currentDirectory =
-      path.dirname(path.fromUri(Uri.file(currentScriptPath)));
+final currentScriptPath = Platform.script.toFilePath();
 
-  final templatesDirectory = path.normalize(
-      path.join(currentDirectory, '..', '..', '..', '..', 'lib', 'templates'));
+final currentDirectory = path.dirname(
+  path.fromUri(
+    Uri.file(currentScriptPath),
+  ),
+);
 
-  print('Current directory: $currentDirectory');
-  print('Templates directory: $templatesDirectory');
+final templatesDirectory = path.normalize(
+  path.join(currentDirectory, '..', '..', '..', '..', 'lib', 'templates'),
+);
 
+void createComponent(String componentName) {
   try {
-    final moduleDirectory =
-        Directory(path.join(Directory.current.path, moduleName.toLowerCase()));
+    final moduleDirectory = Directory(
+      path.join(
+        Directory.current.path,
+        componentName.toLowerCase(),
+      ),
+    );
+    _createComponentStructure(
+        moduleDirectory, templatesDirectory, componentName);
+    print('Component structure for $componentName created successfully.');
+  } catch (e) {
+    print('Error creating component: $e');
+  }
+}
+
+void createModule(String moduleName) {
+  try {
+    final moduleDirectory = Directory(
+      path.join(
+        Directory.current.path,
+        moduleName.toLowerCase(),
+      ),
+    );
     _createModuleStructure(moduleDirectory, templatesDirectory, moduleName);
     print('Module structure for $moduleName created successfully.');
   } catch (e) {
@@ -50,9 +79,22 @@ void createModule(String moduleName) {
   }
 }
 
+void _createComponentStructure(
+  Directory moduleDirectory,
+  String templatesDirectory,
+  String moduleName,
+) {
+  if (!moduleDirectory.existsSync()) {
+    moduleDirectory.createSync(recursive: true);
+  }
+  _copyComponentTemplateFiles(moduleName, templatesDirectory, moduleDirectory);
+}
+
 void _createModuleStructure(
-    Directory moduleDirectory, String templatesDirectory, String moduleName) {
-  // Create main module directory
+  Directory moduleDirectory,
+  String templatesDirectory,
+  String moduleName,
+) {
   if (!moduleDirectory.existsSync()) {
     moduleDirectory.createSync(recursive: true);
   }
@@ -153,5 +195,31 @@ void _copyTemplateFiles(
 
       destinationFile.writeAsStringSync(updatedContentWithImport);
     }
+  }
+}
+
+void _copyComponentTemplateFiles(
+    String moduleName, String templatesDirectory, Directory moduleDirectory) {
+  final fileModuleName = moduleName.toLowerCase();
+  final file = {
+    'source': 'component.dart',
+    'destination': path.join('${fileModuleName}_component.dart')
+  };
+
+  final templatePath = path.join(templatesDirectory, file['source']);
+  final destinationPath = path.join(moduleDirectory.path, file['destination']);
+
+  final templateFile = File(templatePath);
+  final destinationFile = File(destinationPath);
+
+  if (!destinationFile.existsSync()) {
+    destinationFile.createSync(recursive: true);
+    final templateContent = templateFile.readAsStringSync();
+    final updatedContent =
+        templateContent.replaceAll('{{moduleName}}', moduleName);
+    final updatedContentWithImport =
+        updatedContent.replaceAll('{{fileModuleName}}', fileModuleName);
+
+    destinationFile.writeAsStringSync(updatedContentWithImport);
   }
 }

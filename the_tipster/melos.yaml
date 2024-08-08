@@ -15,10 +15,16 @@ scripts:
       melos bootstrap
     description: "Run `flutter pub get` in all packages."
 
+  analyze:
+    run: melos exec --scope=* -c 4 -- \
+      flutter analyze --no-fatal-infos --no-fatal-warnings --no-pub
+    description: Run `flutter analyze` in all modules.
+
   clean:all:
     run: |
-      flutter clean
+      dart clean
       rm -rf .dart_tool
+      rm -rf .idea
       rm -rf .packages
       rm -rf build
       rm -rf ios/.symlinks
